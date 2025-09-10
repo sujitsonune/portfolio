@@ -1,0 +1,315 @@
+/* Optimized CSS animations for performance */
+
+/* GPU-accelerated animations */
+@media (min-width: 768px) and (prefers-reduced-motion: no-preference) {
+  .gpu-accelerated {
+    will-change: transform;
+    backface-visibility: hidden;
+    perspective: 1000px;
+    transform-style: preserve-3d;
+  }
+
+  /* High-performance fade animations */
+  .animate-fade-in {
+    animation: fadeIn 0.6s ease-out forwards;
+  }
+
+  .animate-fade-in-fast {
+    animation: fadeIn 0.3s ease-out forwards;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateZ(0);
+    }
+    to {
+      opacity: 1;
+      transform: translateZ(0);
+    }
+  }
+
+  /* Slide animations with GPU acceleration */
+  .animate-slide-up {
+    animation: slideUp 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  }
+
+  .animate-slide-up-fast {
+    animation: slideUp 0.3s ease-out forwards;
+  }
+
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translate3d(0, 2rem, 0);
+    }
+    to {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
+  }
+
+  /* Scale animations */
+  .animate-scale-in {
+    animation: scaleIn 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  }
+
+  @keyframes scaleIn {
+    from {
+      opacity: 0;
+      transform: scale3d(0.9, 0.9, 1);
+    }
+    to {
+      opacity: 1;
+      transform: scale3d(1, 1, 1);
+    }
+  }
+
+  /* Staggered animations */
+  .stagger-children > * {
+    animation-delay: var(--stagger-delay, 0s);
+  }
+
+  .stagger-children > *:nth-child(1) { --stagger-delay: 0s; }
+  .stagger-children > *:nth-child(2) { --stagger-delay: 0.1s; }
+  .stagger-children > *:nth-child(3) { --stagger-delay: 0.2s; }
+  .stagger-children > *:nth-child(4) { --stagger-delay: 0.3s; }
+  .stagger-children > *:nth-child(5) { --stagger-delay: 0.4s; }
+  .stagger-children > *:nth-child(6) { --stagger-delay: 0.5s; }
+
+  /* Hover animations with performance optimization */
+  .animate-hover-lift {
+    transition: transform 0.2s ease-out;
+    will-change: transform;
+  }
+
+  .animate-hover-lift:hover {
+    transform: translate3d(0, -0.25rem, 0);
+  }
+
+  .animate-hover-scale {
+    transition: transform 0.2s ease-out;
+    will-change: transform;
+  }
+
+  .animate-hover-scale:hover {
+    transform: scale3d(1.05, 1.05, 1);
+  }
+
+  /* Loading animations */
+  .animate-spin-smooth {
+    animation: spinSmooth 1s linear infinite;
+    will-change: transform;
+  }
+
+  @keyframes spinSmooth {
+    from { transform: rotate3d(0, 0, 1, 0deg); }
+    to { transform: rotate3d(0, 0, 1, 360deg); }
+  }
+
+  .animate-pulse-smooth {
+    animation: pulseSmooth 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  @keyframes pulseSmooth {
+    0%, 100% { 
+      opacity: 1; 
+      transform: scale3d(1, 1, 1); 
+    }
+    50% { 
+      opacity: 0.5; 
+      transform: scale3d(1.05, 1.05, 1); 
+    }
+  }
+
+  /* Page transition animations */
+  .page-transition-enter {
+    animation: pageEnter 0.4s ease-out forwards;
+  }
+
+  .page-transition-exit {
+    animation: pageExit 0.3s ease-in forwards;
+  }
+
+  @keyframes pageEnter {
+    from {
+      opacity: 0;
+      transform: translate3d(0, 1rem, 0);
+    }
+    to {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
+  }
+
+  @keyframes pageExit {
+    from {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
+    to {
+      opacity: 0;
+      transform: translate3d(0, -0.5rem, 0);
+    }
+  }
+}
+
+/* Reduced motion fallbacks */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .animate-fade-in,
+  .animate-slide-up,
+  .animate-scale-in,
+  .animate-pulse-smooth,
+  .animate-spin-smooth {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+/* Low-end device optimizations */
+@media (max-width: 768px) {
+  .gpu-accelerated {
+    will-change: auto;
+  }
+
+  /* Simplified animations for mobile */
+  .animate-fade-in,
+  .animate-slide-up,
+  .animate-scale-in {
+    animation-duration: 0.3s;
+    animation-timing-function: ease-out;
+  }
+
+  /* Disable complex animations on low-end devices */
+  .disable-on-mobile {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* Battery-aware animations */
+@media (prefers-reduced-motion: no-preference) {
+  .battery-efficient {
+    animation-play-state: running;
+  }
+}
+
+/* Intersection observer triggered animations */
+.animate-on-scroll {
+  opacity: 0;
+  transform: translateY(2rem);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.animate-on-scroll.in-view {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Performance monitoring utilities */
+.performance-overlay {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  font-family: monospace;
+  font-size: 0.75rem;
+  z-index: 9999;
+  pointer-events: none;
+}
+
+/* Container queries for responsive animations */
+@container (min-width: 768px) {
+  .container-responsive-animation {
+    animation-duration: 0.6s;
+  }
+}
+
+@container (max-width: 767px) {
+  .container-responsive-animation {
+    animation-duration: 0.3s;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .animate-fade-in,
+  .animate-slide-up,
+  .animate-scale-in {
+    animation-duration: 0.2s;
+  }
+}
+
+/* Focus-visible animations for accessibility */
+.focus-animate:focus-visible {
+  animation: focusPulse 0.3s ease-out;
+}
+
+@keyframes focusPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+  100% { transform: scale(1); }
+}
+
+/* Memory-efficient skeleton animations */
+.skeleton-optimized {
+  background: linear-gradient(
+    90deg,
+    #f0f0f0 25%,
+    #e0e0e0 50%,
+    #f0f0f0 75%
+  );
+  background-size: 200% 100%;
+  animation: skeletonShimmer 2s infinite linear;
+}
+
+@keyframes skeletonShimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Dark mode optimizations */
+@media (prefers-color-scheme: dark) {
+  .skeleton-optimized {
+    background: linear-gradient(
+      90deg,
+      #2a2a2a 25%,
+      #3a3a3a 50%,
+      #2a2a2a 75%
+    );
+  }
+}
+
+/* Viewport-based animation control */
+@media (min-height: 600px) {
+  .viewport-optimized {
+    animation-duration: 0.6s;
+  }
+}
+
+@media (max-height: 599px) {
+  .viewport-optimized {
+    animation-duration: 0.3s;
+  }
+}
+
+/* Connection-aware animations */
+@media (prefers-reduced-data: reduce) {
+  .data-aware-animation {
+    animation: none !important;
+    transition: none !important;
+  }
+}

@@ -1,0 +1,497 @@
+/* Print-friendly styles for portfolio */
+@media print {
+  /* Reset and base styles */
+  * {
+    background: transparent !important;
+    color: black !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+    filter: none !important;
+    -ms-filter: none !important;
+  }
+
+  /* Page setup */
+  @page {
+    margin: 0.5in;
+    size: A4;
+  }
+
+  /* Typography */
+  body {
+    font-family: "Times New Roman", serif !important;
+    font-size: 12pt !important;
+    line-height: 1.4 !important;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: Arial, sans-serif !important;
+    font-weight: bold !important;
+    color: black !important;
+    page-break-after: avoid !important;
+    page-break-inside: avoid !important;
+  }
+
+  h1 {
+    font-size: 24pt !important;
+    margin-bottom: 12pt !important;
+    border-bottom: 2pt solid black !important;
+    padding-bottom: 6pt !important;
+  }
+
+  h2 {
+    font-size: 18pt !important;
+    margin: 18pt 0 12pt 0 !important;
+    border-bottom: 1pt solid black !important;
+    padding-bottom: 3pt !important;
+  }
+
+  h3 {
+    font-size: 14pt !important;
+    margin: 14pt 0 8pt 0 !important;
+    font-weight: bold !important;
+  }
+
+  p {
+    margin: 6pt 0 !important;
+    text-align: justify !important;
+    orphans: 3 !important;
+    widows: 3 !important;
+  }
+
+  /* Lists */
+  ul, ol {
+    margin: 6pt 0 !important;
+    padding-left: 18pt !important;
+  }
+
+  li {
+    margin: 3pt 0 !important;
+    page-break-inside: avoid !important;
+  }
+
+  /* Links */
+  a {
+    color: black !important;
+    text-decoration: underline !important;
+  }
+
+  a:visited {
+    color: black !important;
+  }
+
+  /* Show URLs for external links */
+  a[href^="http"]:after,
+  a[href^="https"]:after {
+    content: " (" attr(href) ")";
+    font-size: 10pt;
+    font-style: italic;
+  }
+
+  /* Tables */
+  table {
+    border-collapse: collapse !important;
+    width: 100% !important;
+    margin: 12pt 0 !important;
+  }
+
+  th, td {
+    border: 1pt solid black !important;
+    padding: 6pt !important;
+    text-align: left !important;
+    vertical-align: top !important;
+  }
+
+  th {
+    background: #f0f0f0 !important;
+    font-weight: bold !important;
+  }
+
+  /* Images */
+  img {
+    max-width: 100% !important;
+    height: auto !important;
+    page-break-inside: avoid !important;
+    display: block !important;
+    margin: 12pt auto !important;
+  }
+
+  /* Hide non-essential elements */
+  .no-print,
+  .print-hidden,
+  nav,
+  .navigation,
+  .navbar,
+  .sidebar,
+  .menu,
+  header .menu,
+  .social-media,
+  .social-links,
+  .comments,
+  .advertisement,
+  .ads,
+  .footer-links,
+  .back-to-top,
+  .scroll-indicator,
+  .loading,
+  .spinner,
+  .modal,
+  .popup,
+  .overlay,
+  .tooltip,
+  .dropdown,
+  button:not(.print-show),
+  .btn:not(.print-show),
+  video,
+  audio,
+  iframe:not(.print-show),
+  .video-player,
+  .animation,
+  .parallax {
+    display: none !important;
+  }
+
+  /* Portfolio-specific styles */
+  
+  /* Header/Hero section */
+  .hero-section,
+  .header-section {
+    text-align: center !important;
+    margin-bottom: 24pt !important;
+    padding: 12pt 0 !important;
+    border-bottom: 2pt solid black !important;
+  }
+
+  .profile-image {
+    width: 2in !important;
+    height: 2in !important;
+    border-radius: 50% !important;
+    margin: 0 auto 12pt auto !important;
+    border: 2pt solid black !important;
+  }
+
+  .contact-info {
+    text-align: center !important;
+    margin: 12pt 0 !important;
+  }
+
+  .contact-info a:after {
+    content: none !important;
+  }
+
+  /* Experience section */
+  .experience-item,
+  .job-item {
+    margin-bottom: 18pt !important;
+    page-break-inside: avoid !important;
+    border-left: 3pt solid black !important;
+    padding-left: 12pt !important;
+  }
+
+  .job-title {
+    font-weight: bold !important;
+    font-size: 14pt !important;
+  }
+
+  .company-name {
+    font-style: italic !important;
+    margin: 3pt 0 !important;
+  }
+
+  .job-date {
+    font-size: 10pt !important;
+    margin: 3pt 0 !important;
+  }
+
+  .job-description {
+    margin: 6pt 0 !important;
+  }
+
+  /* Skills section */
+  .skills-section {
+    columns: 2 !important;
+    column-gap: 24pt !important;
+    column-rule: 1pt solid black !important;
+  }
+
+  .skill-category {
+    break-inside: avoid !important;
+    margin-bottom: 12pt !important;
+  }
+
+  .skill-item {
+    display: inline-block !important;
+    margin: 3pt 6pt 3pt 0 !important;
+    padding: 2pt 6pt !important;
+    border: 1pt solid black !important;
+    border-radius: 3pt !important;
+    font-size: 10pt !important;
+  }
+
+  /* Projects section */
+  .project-item {
+    margin-bottom: 18pt !important;
+    page-break-inside: avoid !important;
+    border: 1pt solid black !important;
+    padding: 12pt !important;
+  }
+
+  .project-title {
+    font-weight: bold !important;
+    font-size: 14pt !important;
+    margin-bottom: 6pt !important;
+  }
+
+  .project-description {
+    margin: 6pt 0 !important;
+  }
+
+  .project-tech {
+    margin-top: 6pt !important;
+    font-style: italic !important;
+    font-size: 10pt !important;
+  }
+
+  .project-links {
+    margin-top: 6pt !important;
+    font-size: 10pt !important;
+  }
+
+  /* Education section */
+  .education-item {
+    margin-bottom: 12pt !important;
+    page-break-inside: avoid !important;
+  }
+
+  .degree {
+    font-weight: bold !important;
+  }
+
+  .institution {
+    font-style: italic !important;
+  }
+
+  .graduation-date {
+    font-size: 10pt !important;
+  }
+
+  /* Certifications */
+  .certification-item {
+    margin: 6pt 0 !important;
+    page-break-inside: avoid !important;
+  }
+
+  /* Two-column layout for certain sections */
+  .print-two-column {
+    columns: 2 !important;
+    column-gap: 24pt !important;
+    column-rule: 1pt solid #ccc !important;
+  }
+
+  /* Page breaks */
+  .page-break-before {
+    page-break-before: always !important;
+  }
+
+  .page-break-after {
+    page-break-after: always !important;
+  }
+
+  .page-break-inside-avoid {
+    page-break-inside: avoid !important;
+  }
+
+  /* QR code for portfolio URL */
+  .qr-code-container {
+    position: fixed !important;
+    bottom: 0.5in !important;
+    right: 0.5in !important;
+    width: 1in !important;
+    height: 1in !important;
+  }
+
+  .qr-code {
+    width: 100% !important;
+    height: 100% !important;
+  }
+
+  /* Footer information */
+  .print-footer {
+    position: fixed !important;
+    bottom: 0.25in !important;
+    left: 0.5in !important;
+    right: 2in !important;
+    font-size: 8pt !important;
+    text-align: center !important;
+    border-top: 1pt solid black !important;
+    padding-top: 6pt !important;
+  }
+
+  /* Page numbers */
+  @page :first {
+    @bottom-right {
+      content: none !important;
+    }
+  }
+
+  @page :left {
+    @bottom-left {
+      content: "Page " counter(page) !important;
+      font-size: 8pt !important;
+    }
+  }
+
+  @page :right {
+    @bottom-right {
+      content: "Page " counter(page) !important;
+      font-size: 8pt !important;
+    }
+  }
+
+  /* Dark mode adjustments for print */
+  .dark * {
+    color: black !important;
+    background: white !important;
+  }
+
+  /* Specific portfolio component styles */
+  
+  /* Resume/CV specific styles */
+  .resume-header {
+    text-align: center !important;
+    border-bottom: 2pt solid black !important;
+    padding-bottom: 12pt !important;
+    margin-bottom: 18pt !important;
+  }
+
+  .resume-section {
+    margin-bottom: 18pt !important;
+  }
+
+  .resume-section-title {
+    font-size: 16pt !important;
+    font-weight: bold !important;
+    border-bottom: 1pt solid black !important;
+    padding-bottom: 3pt !important;
+    margin-bottom: 12pt !important;
+    text-transform: uppercase !important;
+  }
+
+  /* Compact layout for print */
+  .print-compact p {
+    margin: 3pt 0 !important;
+  }
+
+  .print-compact h1 {
+    font-size: 20pt !important;
+    margin-bottom: 6pt !important;
+  }
+
+  .print-compact h2 {
+    font-size: 14pt !important;
+    margin: 12pt 0 6pt 0 !important;
+  }
+
+  .print-compact h3 {
+    font-size: 12pt !important;
+    margin: 9pt 0 3pt 0 !important;
+  }
+
+  /* Print-only elements */
+  .print-only {
+    display: block !important;
+  }
+
+  .print-only-inline {
+    display: inline !important;
+  }
+
+  .print-only-table {
+    display: table !important;
+  }
+
+  /* Utility classes for print */
+  .print-text-small {
+    font-size: 10pt !important;
+  }
+
+  .print-text-large {
+    font-size: 14pt !important;
+  }
+
+  .print-bold {
+    font-weight: bold !important;
+  }
+
+  .print-italic {
+    font-style: italic !important;
+  }
+
+  .print-center {
+    text-align: center !important;
+  }
+
+  .print-right {
+    text-align: right !important;
+  }
+
+  .print-no-margin {
+    margin: 0 !important;
+  }
+
+  .print-margin-top {
+    margin-top: 12pt !important;
+  }
+
+  .print-margin-bottom {
+    margin-bottom: 12pt !important;
+  }
+
+  /* Contact information formatting */
+  .contact-grid {
+    display: table !important;
+    width: 100% !important;
+    margin: 12pt 0 !important;
+  }
+
+  .contact-item {
+    display: table-row !important;
+  }
+
+  .contact-label {
+    display: table-cell !important;
+    font-weight: bold !important;
+    width: 20% !important;
+    padding: 3pt 12pt 3pt 0 !important;
+  }
+
+  .contact-value {
+    display: table-cell !important;
+    padding: 3pt 0 !important;
+  }
+
+  /* Responsive adjustments for different paper sizes */
+  @page A4 {
+    size: 210mm 297mm;
+    margin: 20mm;
+  }
+
+  @page Letter {
+    size: 8.5in 11in;
+    margin: 0.75in;
+  }
+
+  /* High contrast mode for better printing */
+  @media print and (prefers-contrast: high) {
+    * {
+      background: white !important;
+      color: black !important;
+    }
+
+    .skill-item,
+    .project-item,
+    .experience-item {
+      border-color: black !important;
+      border-width: 2pt !important;
+    }
+  }
+}

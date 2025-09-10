@@ -1,0 +1,260 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+    
+    function isAdmin() {
+      return isAuthenticated() && 
+             exists(/databases/$(database)/documents/admins/$(request.auth.uid));
+    }
+    
+    function isValidTimestamp(timestamp) {
+      return timestamp is timestamp;
+    }
+    
+    function hasValidCreateFields() {
+      return 'createdAt' in resource.data && 
+             'updatedAt' in resource.data &&
+             isValidTimestamp(resource.data.createdAt) &&
+             isValidTimestamp(resource.data.updatedAt);
+    }
+    
+    function hasValidUpdateFields() {
+      return 'updatedAt' in resource.data &&
+             isValidTimestamp(resource.data.updatedAt) &&
+             resource.data.createdAt == request.resource.data.createdAt;
+    }
+
+    // Admin collection - only readable by authenticated users, writable by admins
+    match /admins/{userId} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin();
+    }
+
+    // Personal Info - publicly readable, admin writable
+    match /personalInfo/{docId} {
+      allow read: if true; // Publicly readable for portfolio
+      allow create: if isAdmin() && hasValidCreateFields();
+      allow update: if isAdmin() && hasValidUpdateFields();
+      allow delete: if isAdmin();
+      
+      // Validate personal info structure
+      allow write: if validatePersonalInfo();
+    }
+    
+    function validatePersonalInfo() {
+      let data = request.resource.data;
+      return data.keys().hasAll(['name', 'title', 'bio', 'contact', 'socialLinks', 'isActive']) &&
+             data.name is string && data.name.size() > 0 &&
+             data.title is string && data.title.size() > 0 &&
+             data.bio is string && data.bio.size() > 0 &&
+             validateContactInfo(data.contact) &&
+             validateSocialLinks(data.socialLinks) &&
+             data.isActive is bool;
+    }
+    
+    function validateContactInfo(contact) {
+      return contact.keys().hasAll(['email', 'location', 'availability']) &&
+             contact.email is string && contact.email.matches('.*@.*\\..*') &&
+             contact.location.keys().hasAll(['city', 'country']) &&
+             contact.location.city is string &&
+             contact.location.country is string &&
+             contact.availability in ['available', 'busy', 'unavailable'];
+    }
+    
+    function validateSocialLinks(socialLinks) {
+      return socialLinks is list &&
+             socialLinks.size() >= 0 &&
+             socialLinks.size() <= 10; // Reasonable limit
+    }
+
+    // Work Experience - publicly readable, admin writable
+    match /workExperience/{docId} {
+      allow read: if true;
+      allow create: if isAdmin() && hasValidCreateFields();
+      allow update: if isAdmin() && hasValidUpdateFields();
+      allow delete: if isAdmin();
+      
+      allow write: if validateWorkExperience();
+    }
+    
+    function validateWorkExperience() {
+      let data = request.resource.data;
+      return data.keys().hasAll(['company', 'role', 'employmentType', 'location', 'duration', 'responsibilities', 'achievements', 'technologies', 'order', 'isVisible']) &&
+             data.company is string && data.company.size() > 0 &&
+             data.role is string && data.role.size() > 0 &&
+             data.employmentType in ['full-time', 'part-time', 'contract', 'freelance', 'internship'] &&
+             data.duration.keys().hasAll(['startDate', 'isCurrent']) &&
+             data.duration.startDate is timestamp &&
+             data.duration.isCurrent is bool &&
+             data.responsibilities is list &&
+             data.achievements is list &&
+             data.technologies is list &&
+             data.order is number &&
+             data.isVisible is bool;
+    }
+
+    // Projects - publicly readable, admin writable
+    match /projects/{docId} {
+      allow read: if true;
+      allow create: if isAdmin() && hasValidCreateFields();
+      allow update: if isAdmin() && hasValidUpdateFields();
+      allow delete: if isAdmin();
+      
+      allow write: if validateProject();
+    }
+    
+    function validateProject() {
+      let data = request.resource.data;
+      return data.keys().hasAll(['title', 'description', 'category', 'status', 'technologies', 'features', 'images', 'links', 'timeline', 'isFeatured', 'order', 'isVisible']) &&
+             data.title is string && data.title.size() > 0 &&
+             data.description is string && data.description.size() > 0 &&
+             data.category in ['web', 'mobile', 'desktop', 'ai-ml', 'other'] &&
+             data.status in ['completed', 'in-progress', 'planned', 'archived'] &&
+             data.technologies is list &&
+             data.features is list &&
+             data.images is list &&
+             data.links is list &&
+             data.timeline.keys().hasAll(['startDate']) &&
+             data.timeline.startDate is timestamp &&
+             data.isFeatured is bool &&
+             data.order is number &&
+             data.isVisible is bool;
+    }
+
+    // Skills - publicly readable, admin writable
+    match /skills/{docId} {
+      allow read: if true;
+      allow create: if isAdmin() && hasValidCreateFields();
+      allow update: if isAdmin() && hasValidUpdateFields();
+      allow delete: if isAdmin();
+      
+      allow write: if validateSkill();
+    }
+    
+    function validateSkill() {
+      let data = request.resource.data;
+      return data.keys().hasAll(['name', 'category', 'proficiencyLevel', 'yearsOfExperience', 'order', 'isVisible']) &&
+             data.name is string && data.name.size() > 0 &&
+             data.category in ['frontend', 'backend', 'database', 'mobile', 'cloud', 'devops', 'design', 'testing', 'other'] &&
+             data.proficiencyLevel in ['beginner', 'intermediate', 'advanced', 'expert'] &&
+             data.yearsOfExperience is number && data.yearsOfExperience >= 0 &&
+             data.order is number &&
+             data.isVisible is bool;
+    }
+
+    // Achievements - publicly readable, admin writable
+    match /achievements/{docId} {
+      allow read: if true;
+      allow create: if isAdmin() && hasValidCreateFields();
+      allow update: if isAdmin() && hasValidUpdateFields();
+      allow delete: if isAdmin();
+      
+      allow write: if validateAchievement();
+    }
+    
+    function validateAchievement() {
+      let data = request.resource.data;
+      return data.keys().hasAll(['title', 'description', 'category', 'date', 'organization', 'isVisible', 'order']) &&
+             data.title is string && data.title.size() > 0 &&
+             data.description is string && data.description.size() > 0 &&
+             data.category in ['certification', 'award', 'publication', 'speaking', 'contribution', 'milestone', 'other'] &&
+             data.date is timestamp &&
+             data.organization is string && data.organization.size() > 0 &&
+             data.isVisible is bool &&
+             data.order is number;
+    }
+
+    // Testimonials - publicly readable, admin writable
+    match /testimonials/{docId} {
+      allow read: if true;
+      allow create: if isAdmin() && hasValidCreateFields();
+      allow update: if isAdmin() && hasValidUpdateFields();
+      allow delete: if isAdmin();
+      
+      allow write: if validateTestimonial();
+    }
+    
+    function validateTestimonial() {
+      let data = request.resource.data;
+      return data.keys().hasAll(['name', 'role', 'company', 'message', 'relationship', 'isVisible', 'order']) &&
+             data.name is string && data.name.size() > 0 &&
+             data.role is string && data.role.size() > 0 &&
+             data.company is string && data.company.size() > 0 &&
+             data.message is string && data.message.size() > 0 &&
+             data.relationship in ['colleague', 'client', 'manager', 'subordinate', 'other'] &&
+             data.isVisible is bool &&
+             data.order is number;
+    }
+
+    // Contact Submissions - create only (public form), read/update by admin
+    match /contactSubmissions/{docId} {
+      allow read: if isAdmin();
+      allow create: if validateContactSubmission();
+      allow update: if isAdmin(); // Only admin can mark as responded
+      allow delete: if isAdmin();
+    }
+    
+    function validateContactSubmission() {
+      let data = request.resource.data;
+      return data.keys().hasAll(['form', 'timestamp', 'responded']) &&
+             validateContactForm(data.form) &&
+             data.timestamp is timestamp &&
+             data.responded is bool &&
+             data.responded == false; // New submissions must be unresponded
+    }
+    
+    function validateContactForm(form) {
+      return form.keys().hasAll(['name', 'email', 'subject', 'message']) &&
+             form.name is string && form.name.size() > 0 && form.name.size() <= 100 &&
+             form.email is string && form.email.matches('.*@.*\\..*') &&
+             form.subject is string && form.subject.size() > 0 && form.subject.size() <= 200 &&
+             form.message is string && form.message.size() > 0 && form.message.size() <= 2000 &&
+             (!('honeypot' in form) || form.honeypot == ''); // Spam protection
+    }
+
+    // Page Views - create only for analytics (no auth required)
+    match /pageViews/{docId} {
+      allow create: if validatePageView();
+      allow read: if isAdmin();
+      allow delete: if isAdmin();
+    }
+    
+    function validatePageView() {
+      let data = request.resource.data;
+      return data.keys().hasAll(['page', 'timestamp']) &&
+             data.page is string && data.page.size() > 0 &&
+             data.timestamp is timestamp;
+    }
+
+    // User preferences (for authenticated users)
+    match /userPreferences/{userId} {
+      allow read, write: if isOwner(userId) && hasValidUserPreferences();
+    }
+    
+    function hasValidUserPreferences() {
+      let data = request.resource.data;
+      return data.keys().hasAll(['theme', 'language']) &&
+             data.theme in ['light', 'dark', 'system'] &&
+             data.language is string;
+    }
+
+    // Rate limiting collection (to prevent spam)
+    match /rateLimiting/{identifier} {
+      allow read, write: if false; // Only server-side functions should access this
+    }
+
+    // Catch-all rule - deny access to any other documents
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
