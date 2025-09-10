@@ -2,8 +2,6 @@
 const nextConfig = {
   // Enable experimental features for better performance
   experimental: {
-    // Enable PPR for faster page loads
-    ppr: true,
     // Enable server components optimizations
     serverComponentsExternalPackages: ['@firebase/app'],
     // Enable optimized package imports
@@ -99,7 +97,7 @@ const nextConfig = {
         ]
       },
       {
-        source: '/(.*\\.(css|js|ico|png|jpg|jpeg|gif|webp|avif|svg|woff|woff2|ttf|eot))',
+        source: '/:path*\\.(css|js|ico|png|jpg|jpeg|gif|webp|avif|svg|woff|woff2|ttf|eot)',
         headers: [
           {
             key: 'Cache-Control',
